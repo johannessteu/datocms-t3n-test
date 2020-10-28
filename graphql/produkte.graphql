@@ -17,6 +17,7 @@ query ProdukteIndex {
             }
 
             ... on FeaturedproductlistRecord {
+                id
                 headline
                 beschreibung
                 limit

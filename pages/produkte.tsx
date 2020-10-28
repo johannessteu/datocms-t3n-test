@@ -36,11 +36,11 @@ const Produkte: NextPage<ProdukteIndexInterface> = ({
       <Layout>
         {content.map((el) => {
           if (el.__typename === 'FeaturedproductlistRecord') {
-            return <FeaturedProductRecord record={el} />;
+            return <FeaturedProductRecord key={el.id} record={el} />;
           }
 
           if (el.__typename === 'ProductcategorylistRecord') {
-            return <ProductCategoryListRecord record={el} />;
+            return <ProductCategoryListRecord key={el.id} record={el} />;
           }
           return null;
         })}
@@ -52,8 +52,10 @@ const Produkte: NextPage<ProdukteIndexInterface> = ({
   );
 };
 
-export const getStaticProps: GetStaticProps<ProdukteIndexInterface> = async () => {
-  const datoCmsClient = createDatoCmsClient();
+export const getStaticProps: GetStaticProps<ProdukteIndexInterface> = async (
+  context
+) => {
+  const datoCmsClient = createDatoCmsClient(context.preview);
 
   const { data } = await datoCmsClient.query<IProdukteIndexQuery>({
     query: ProdukteIndexDocument,

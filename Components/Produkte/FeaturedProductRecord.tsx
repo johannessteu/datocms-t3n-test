@@ -26,7 +26,7 @@ const FeaturedProductRecord: React.FC<{
 
       <Grid>
         {record.products.map((p) => (
-          <GridItem width={[1, 1, 1 / record.products.length]}>
+          <GridItem key={p.id} width={[1, 1, 1 / record.products.length]}>
             <Card href={`https://t3n.de/news?p=${p.newsIdentifier}`}>
               {p.titel}
             </Card>

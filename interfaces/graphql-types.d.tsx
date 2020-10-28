@@ -23,11 +23,14 @@ export type Scalars = {
   CustomData: any;
   /** Represents signed double-precision fractional values as specified by [IEEE 754](http://en.wikipedia.org/wiki/IEEE_floating_point). */
   FloatType: any;
+  JsonField: any;
 };
 
 /** The query root for this schema */
 export type IQuery = {
   __typename?: 'Query';
+  /** Returns meta information regarding a record collection */
+  _allLandingpagesMeta: ICollectionMetadata;
   /** Returns meta information regarding a record collection */
   _allProductgroupsMeta: ICollectionMetadata;
   /** Returns meta information regarding a record collection */
@@ -37,11 +40,15 @@ export type IQuery = {
   /** Returns the single instance record */
   _site: ISite;
   /** Returns a collection of records */
+  allLandingpages: Array<ILandingpageRecord>;
+  /** Returns a collection of records */
   allProductgroups: Array<IProductgroupRecord>;
   /** Returns a collection of records */
   allProdukts: Array<IProduktRecord>;
   /** Returns a collection of assets */
   allUploads: Array<IFileField>;
+  /** Returns a specific record */
+  landingpage?: Maybe<ILandingpageRecord>;
   /** Returns a specific record */
   productgroup?: Maybe<IProductgroupRecord>;
   /** Returns a specific record */
@@ -50,6 +57,12 @@ export type IQuery = {
   produkte?: Maybe<IProdukteRecord>;
   /** Returns a specific asset */
   upload?: Maybe<IFileField>;
+};
+
+/** The query root for this schema */
+export type IQuery_AllLandingpagesMetaArgs = {
+  locale?: Maybe<ISiteLocale>;
+  filter?: Maybe<ILandingpageModelFilter>;
 };
 
 /** The query root for this schema */
@@ -73,6 +86,15 @@ export type IQuery_AllUploadsMetaArgs = {
 /** The query root for this schema */
 export type IQuery_SiteArgs = {
   locale?: Maybe<ISiteLocale>;
+};
+
+/** The query root for this schema */
+export type IQueryAllLandingpagesArgs = {
+  locale?: Maybe<ISiteLocale>;
+  skip?: Maybe<Scalars['IntType']>;
+  first?: Maybe<Scalars['IntType']>;
+  filter?: Maybe<ILandingpageModelFilter>;
+  orderBy?: Maybe<Array<Maybe<ILandingpageModelOrderBy>>>;
 };
 
 /** The query root for this schema */
@@ -100,6 +122,13 @@ export type IQueryAllUploadsArgs = {
   first?: Maybe<Scalars['IntType']>;
   filter?: Maybe<IUploadFilter>;
   orderBy?: Maybe<Array<Maybe<IUploadOrderBy>>>;
+};
+
+/** The query root for this schema */
+export type IQueryLandingpageArgs = {
+  locale?: Maybe<ISiteLocale>;
+  filter?: Maybe<ILandingpageModelFilter>;
+  orderBy?: Maybe<Array<Maybe<ILandingpageModelOrderBy>>>;
 };
 
 /** The query root for this schema */
@@ -1737,8 +1766,8 @@ export type IFileFilter = {
 };
 
 export enum IProduktModelOrderBy {
-  _CreatedAtAsc = '_createdAt_ASC',
-  _CreatedAtDesc = '_createdAt_DESC',
+  CreatedAtAsc = '_createdAt_ASC',
+  CreatedAtDesc = '_createdAt_DESC',
   CreatedAtAsc = 'createdAt_ASC',
   CreatedAtDesc = 'createdAt_DESC',
   IdAsc = 'id_ASC',
@@ -1751,8 +1780,8 @@ export enum IProduktModelOrderBy {
   PublishedAtDesc = '_publishedAt_DESC',
   StatusAsc = '_status_ASC',
   StatusDesc = '_status_DESC',
-  _UpdatedAtAsc = '_updatedAt_ASC',
-  _UpdatedAtDesc = '_updatedAt_DESC',
+  UpdatedAtAsc = '_updatedAt_ASC',
+  UpdatedAtDesc = '_updatedAt_DESC',
   UpdatedAtAsc = 'updatedAt_ASC',
   UpdatedAtDesc = 'updatedAt_DESC',
   IsValidAsc = '_isValid_ASC',
@@ -1789,6 +1818,7 @@ export type IProdukteRecord = {
   content?: Maybe<Array<Maybe<IProdukteModelContentField>>>;
   createdAt: Scalars['DateTime'];
   id: Scalars['ItemId'];
+  previewlink?: Maybe<Scalars['JsonField']>;
   seoTags?: Maybe<ISeoField>;
   titel?: Maybe<Scalars['String']>;
   updatedAt: Scalars['DateTime'];
@@ -1974,8 +2004,8 @@ export type ISlugFilter = {
 };
 
 export enum IProductgroupModelOrderBy {
-  CreatedAtAsc_ = '_createdAt_ASC',
-  CreatedAtDesc_ = '_createdAt_DESC',
+  CreatedAtAsc = '_createdAt_ASC',
+  CreatedAtDesc = '_createdAt_DESC',
   CreatedAtAsc = 'createdAt_ASC',
   CreatedAtDesc = 'createdAt_DESC',
   IdAsc = 'id_ASC',
@@ -1988,8 +2018,103 @@ export enum IProductgroupModelOrderBy {
   PublishedAtDesc = '_publishedAt_DESC',
   StatusAsc = '_status_ASC',
   StatusDesc = '_status_DESC',
-  _UpdatedAtAsc = '_updatedAt_ASC',
-  _UpdatedAtDesc = '_updatedAt_DESC',
+  UpdatedAtAsc = '_updatedAt_ASC',
+  UpdatedAtDesc = '_updatedAt_DESC',
+  UpdatedAtAsc = 'updatedAt_ASC',
+  UpdatedAtDesc = 'updatedAt_DESC',
+  IsValidAsc = '_isValid_ASC',
+  IsValidDesc = '_isValid_DESC',
+  TitelAsc = 'titel_ASC',
+  TitelDesc = 'titel_DESC',
+}
+
+/** Record of type Landingpage (landingpage) */
+export type ILandingpageRecord = {
+  __typename?: 'LandingpageRecord';
+  _createdAt: Scalars['DateTime'];
+  _firstPublishedAt?: Maybe<Scalars['DateTime']>;
+  _isValid: Scalars['BooleanType'];
+  _modelApiKey: Scalars['String'];
+  _publicationScheduledAt?: Maybe<Scalars['DateTime']>;
+  _publishedAt?: Maybe<Scalars['DateTime']>;
+  /** SEO meta tags */
+  _seoMetaTags: Array<ITag>;
+  _status: IItemStatus;
+  _updatedAt: Scalars['DateTime'];
+  content?: Maybe<Array<Maybe<ILandingpageModelContentField>>>;
+  createdAt: Scalars['DateTime'];
+  id: Scalars['ItemId'];
+  slug?: Maybe<Scalars['String']>;
+  titel?: Maybe<Scalars['String']>;
+  updatedAt: Scalars['DateTime'];
+};
+
+/** Record of type Landingpage (landingpage) */
+export type ILandingpageRecord_SeoMetaTagsArgs = {
+  locale?: Maybe<ISiteLocale>;
+};
+
+export type ILandingpageModelContentField =
+  | IFeaturedproductlistRecord
+  | INewslistRecord;
+
+/** Record of type NewsList (newslist) */
+export type INewslistRecord = {
+  __typename?: 'NewslistRecord';
+  _createdAt: Scalars['DateTime'];
+  _firstPublishedAt?: Maybe<Scalars['DateTime']>;
+  _isValid: Scalars['BooleanType'];
+  _modelApiKey: Scalars['String'];
+  _publicationScheduledAt?: Maybe<Scalars['DateTime']>;
+  _publishedAt?: Maybe<Scalars['DateTime']>;
+  /** SEO meta tags */
+  _seoMetaTags: Array<ITag>;
+  _status: IItemStatus;
+  _updatedAt: Scalars['DateTime'];
+  createdAt: Scalars['DateTime'];
+  headline?: Maybe<Scalars['String']>;
+  id: Scalars['ItemId'];
+  updatedAt: Scalars['DateTime'];
+};
+
+/** Record of type NewsList (newslist) */
+export type INewslistRecord_SeoMetaTagsArgs = {
+  locale?: Maybe<ISiteLocale>;
+};
+
+export type ILandingpageModelFilter = {
+  _createdAt?: Maybe<ICreatedAtFilter>;
+  createdAt?: Maybe<ICreatedAtFilter>;
+  id?: Maybe<IItemIdFilter>;
+  _firstPublishedAt?: Maybe<IPublishedAtFilter>;
+  _publicationScheduledAt?: Maybe<IPublishedAtFilter>;
+  _publishedAt?: Maybe<IPublishedAtFilter>;
+  _status?: Maybe<IStatusFilter>;
+  _updatedAt?: Maybe<IUpdatedAtFilter>;
+  updatedAt?: Maybe<IUpdatedAtFilter>;
+  _isValid?: Maybe<IBooleanFilter>;
+  slug?: Maybe<ISlugFilter>;
+  titel?: Maybe<IStringFilter>;
+  OR?: Maybe<Array<Maybe<ILandingpageModelFilter>>>;
+};
+
+export enum ILandingpageModelOrderBy {
+  CreatedAtAsc = '_createdAt_ASC',
+  CreatedAtDesc = '_createdAt_DESC',
+  CreatedAtAsc = 'createdAt_ASC',
+  CreatedAtDesc = 'createdAt_DESC',
+  IdAsc = 'id_ASC',
+  IdDesc = 'id_DESC',
+  FirstPublishedAtAsc = '_firstPublishedAt_ASC',
+  FirstPublishedAtDesc = '_firstPublishedAt_DESC',
+  PublicationScheduledAtAsc = '_publicationScheduledAt_ASC',
+  PublicationScheduledAtDesc = '_publicationScheduledAt_DESC',
+  PublishedAtAsc = '_publishedAt_ASC',
+  PublishedAtDesc = '_publishedAt_DESC',
+  StatusAsc = '_status_ASC',
+  StatusDesc = '_status_DESC',
+  UpdatedAtAsc = '_updatedAt_ASC',
+  UpdatedAtDesc = '_updatedAt_DESC',
   UpdatedAtAsc = 'updatedAt_ASC',
   UpdatedAtDesc = 'updatedAt_DESC',
   IsValidAsc = '_isValid_ASC',
@@ -2410,7 +2535,7 @@ export type IProdukteIndexQuery = { __typename?: 'Query' } & {
                   })
               | ({ __typename: 'FeaturedproductlistRecord' } & Pick<
                   IFeaturedproductlistRecord,
-                  'headline' | 'beschreibung' | 'limit'
+                  'id' | 'headline' | 'beschreibung' | 'limit'
                 > & {
                     products: Array<
                       { __typename?: 'ProduktRecord' } & Pick<
@@ -2448,6 +2573,7 @@ export const ProdukteIndexDocument = gql`
           }
         }
         ... on FeaturedproductlistRecord {
+          id
           headline
           beschreibung
           limit

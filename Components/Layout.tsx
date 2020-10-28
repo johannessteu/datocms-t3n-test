@@ -4,8 +4,10 @@ import * as React from 'react';
 const Layout: React.FC = ({ children }) => {
   return (
     <PageLayout showHeader noContentPadding headerContent={<p>test</p>}>
-      <GlobalStyle />
-      {children}
+      <>
+        <GlobalStyle />
+        {children}
+      </>
     </PageLayout>
   );
 };
