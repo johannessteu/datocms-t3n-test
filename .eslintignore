@@ -1,0 +1,17 @@
+*.d.ts
+*.md
+*.svg
+*.png
+*.jpg
+*.gif
+favicon.ico
+*.json
+*.lock
+*.css
+.next/
+dist
+next.config.js
+__generated__
+writeGraphQlFragments.js
+codegen.yml
+interfaces/graphql-types.d.tsx

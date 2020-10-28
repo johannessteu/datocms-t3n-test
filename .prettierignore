@@ -1,0 +1,6 @@
+*.d.ts
+dist/
+build/
+storybook-static/
+__generated__
+.next

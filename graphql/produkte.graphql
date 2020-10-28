@@ -1,0 +1,37 @@
+query ProdukteIndex {
+    produkte {
+        titel
+        content {
+            __typename
+            ... on ProductcategorylistRecord {
+                id
+                headline
+                beschreibungstext
+                insection
+                sectionvariant
+                productcategories {
+                    id
+                    titel
+                    slug
+                }
+            }
+
+            ... on FeaturedproductlistRecord {
+                headline
+                beschreibung
+                limit
+                products {
+                    id
+                    titel
+                    newsIdentifier
+                }
+            }
+        }
+
+        beschreibungstext
+        _seoMetaTags {
+            attributes
+            content
+        }
+    }
+}
