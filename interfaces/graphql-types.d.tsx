@@ -1766,8 +1766,6 @@ export type IFileFilter = {
 };
 
 export enum IProduktModelOrderBy {
-  CreatedAtAsc = '_createdAt_ASC',
-  CreatedAtDesc = '_createdAt_DESC',
   CreatedAtAsc = 'createdAt_ASC',
   CreatedAtDesc = 'createdAt_DESC',
   IdAsc = 'id_ASC',
@@ -1780,8 +1778,6 @@ export enum IProduktModelOrderBy {
   PublishedAtDesc = '_publishedAt_DESC',
   StatusAsc = '_status_ASC',
   StatusDesc = '_status_DESC',
-  UpdatedAtAsc = '_updatedAt_ASC',
-  UpdatedAtDesc = '_updatedAt_DESC',
   UpdatedAtAsc = 'updatedAt_ASC',
   UpdatedAtDesc = 'updatedAt_DESC',
   IsValidAsc = '_isValid_ASC',
@@ -2004,8 +2000,6 @@ export type ISlugFilter = {
 };
 
 export enum IProductgroupModelOrderBy {
-  CreatedAtAsc = '_createdAt_ASC',
-  CreatedAtDesc = '_createdAt_DESC',
   CreatedAtAsc = 'createdAt_ASC',
   CreatedAtDesc = 'createdAt_DESC',
   IdAsc = 'id_ASC',
@@ -2018,8 +2012,6 @@ export enum IProductgroupModelOrderBy {
   PublishedAtDesc = '_publishedAt_DESC',
   StatusAsc = '_status_ASC',
   StatusDesc = '_status_DESC',
-  UpdatedAtAsc = '_updatedAt_ASC',
-  UpdatedAtDesc = '_updatedAt_DESC',
   UpdatedAtAsc = 'updatedAt_ASC',
   UpdatedAtDesc = 'updatedAt_DESC',
   IsValidAsc = '_isValid_ASC',
@@ -2099,8 +2091,6 @@ export type ILandingpageModelFilter = {
 };
 
 export enum ILandingpageModelOrderBy {
-  CreatedAtAsc = '_createdAt_ASC',
-  CreatedAtDesc = '_createdAt_DESC',
   CreatedAtAsc = 'createdAt_ASC',
   CreatedAtDesc = 'createdAt_DESC',
   IdAsc = 'id_ASC',
@@ -2113,8 +2103,6 @@ export enum ILandingpageModelOrderBy {
   PublishedAtDesc = '_publishedAt_DESC',
   StatusAsc = '_status_ASC',
   StatusDesc = '_status_DESC',
-  UpdatedAtAsc = '_updatedAt_ASC',
-  UpdatedAtDesc = '_updatedAt_DESC',
   UpdatedAtAsc = 'updatedAt_ASC',
   UpdatedAtDesc = 'updatedAt_DESC',
   IsValidAsc = '_isValid_ASC',
