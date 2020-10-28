@@ -1,0 +1,38 @@
+query ProductGroupBySlug ($slug: String!) {
+    productgroup(filter: {slug: {eq: $slug}}) {
+        id
+        titel
+        beschreibung
+        content {
+            __typename
+            ... on ProductcategorylistRecord {
+                id
+                headline
+                beschreibungstext
+                insection
+                sectionvariant
+                productcategories {
+                    id
+                    titel
+                    slug
+                }
+            }
+            ... on FeaturedproductlistRecord {
+                id
+                headline
+                beschreibung
+                limit
+                products {
+                    id
+                    titel
+                    newsIdentifier
+                }
+            }
+        }
+        produkte {
+            id
+            newsIdentifier
+            titel
+        }
+    }
+}

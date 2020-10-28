@@ -1881,6 +1881,7 @@ export type IProductgroupRecord = {
   _status: IItemStatus;
   _updatedAt: Scalars['DateTime'];
   beschreibung?: Maybe<Scalars['String']>;
+  content?: Maybe<Array<Maybe<IProductgroupModelContentField>>>;
   createdAt: Scalars['DateTime'];
   id: Scalars['ItemId'];
   produkte: Array<IProduktRecord>;
@@ -1906,13 +1907,9 @@ export type IProductgroupRecordSeoTextArgs = {
   markdown?: Maybe<Scalars['Boolean']>;
 };
 
-export type ISeoField = {
-  __typename?: 'SeoField';
-  description?: Maybe<Scalars['String']>;
-  image?: Maybe<IFileField>;
-  title?: Maybe<Scalars['String']>;
-  twitterCard?: Maybe<Scalars['String']>;
-};
+export type IProductgroupModelContentField =
+  | IProductcategorylistRecord
+  | IFeaturedproductlistRecord;
 
 /** Record of type Auflistung von Featured Produkte (featuredproductlist) */
 export type IFeaturedproductlistRecord = {
@@ -1945,6 +1942,14 @@ export type IFeaturedproductlistRecord_SeoMetaTagsArgs = {
 /** Record of type Auflistung von Featured Produkte (featuredproductlist) */
 export type IFeaturedproductlistRecordBeschreibungArgs = {
   markdown?: Maybe<Scalars['Boolean']>;
+};
+
+export type ISeoField = {
+  __typename?: 'SeoField';
+  description?: Maybe<Scalars['String']>;
+  image?: Maybe<IFileField>;
+  title?: Maybe<Scalars['String']>;
+  twitterCard?: Maybe<Scalars['String']>;
 };
 
 export type IProductgroupModelFilter = {
@@ -2495,6 +2500,58 @@ export enum IUploadOrderBy {
   IdDesc = 'id_DESC',
 }
 
+export type IProductGroupBySlugQueryVariables = Exact<{
+  slug: Scalars['String'];
+}>;
+
+export type IProductGroupBySlugQuery = { __typename?: 'Query' } & {
+  productgroup?: Maybe<
+    { __typename?: 'ProductgroupRecord' } & Pick<
+      IProductgroupRecord,
+      'id' | 'titel' | 'beschreibung'
+    > & {
+        content?: Maybe<
+          Array<
+            Maybe<
+              | ({ __typename: 'ProductcategorylistRecord' } & Pick<
+                  IProductcategorylistRecord,
+                  | 'id'
+                  | 'headline'
+                  | 'beschreibungstext'
+                  | 'insection'
+                  | 'sectionvariant'
+                > & {
+                    productcategories: Array<
+                      { __typename?: 'ProductgroupRecord' } & Pick<
+                        IProductgroupRecord,
+                        'id' | 'titel' | 'slug'
+                      >
+                    >;
+                  })
+              | ({ __typename: 'FeaturedproductlistRecord' } & Pick<
+                  IFeaturedproductlistRecord,
+                  'id' | 'headline' | 'beschreibung' | 'limit'
+                > & {
+                    products: Array<
+                      { __typename?: 'ProduktRecord' } & Pick<
+                        IProduktRecord,
+                        'id' | 'titel' | 'newsIdentifier'
+                      >
+                    >;
+                  })
+            >
+          >
+        >;
+        produkte: Array<
+          { __typename?: 'ProduktRecord' } & Pick<
+            IProduktRecord,
+            'id' | 'newsIdentifier' | 'titel'
+          >
+        >;
+      }
+  >;
+};
+
 export type IProdukteIndexQueryVariables = Exact<{ [key: string]: never }>;
 
 export type IProdukteIndexQuery = { __typename?: 'Query' } & {
@@ -2542,6 +2599,95 @@ export type IProdukteIndexQuery = { __typename?: 'Query' } & {
   >;
 };
 
+export const ProductGroupBySlugDocument = gql`
+  query ProductGroupBySlug($slug: String!) {
+    productgroup(filter: { slug: { eq: $slug } }) {
+      id
+      titel
+      beschreibung
+      content {
+        __typename
+        ... on ProductcategorylistRecord {
+          id
+          headline
+          beschreibungstext
+          insection
+          sectionvariant
+          productcategories {
+            id
+            titel
+            slug
+          }
+        }
+        ... on FeaturedproductlistRecord {
+          id
+          headline
+          beschreibung
+          limit
+          products {
+            id
+            titel
+            newsIdentifier
+          }
+        }
+      }
+      produkte {
+        id
+        newsIdentifier
+        titel
+      }
+    }
+  }
+`;
+
+/**
+ * __useProductGroupBySlugQuery__
+ *
+ * To run a query within a React component, call `useProductGroupBySlugQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProductGroupBySlugQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProductGroupBySlugQuery({
+ *   variables: {
+ *      slug: // value for 'slug'
+ *   },
+ * });
+ */
+export function useProductGroupBySlugQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    IProductGroupBySlugQuery,
+    IProductGroupBySlugQueryVariables
+  >
+) {
+  return Apollo.useQuery<
+    IProductGroupBySlugQuery,
+    IProductGroupBySlugQueryVariables
+  >(ProductGroupBySlugDocument, baseOptions);
+}
+export function useProductGroupBySlugLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    IProductGroupBySlugQuery,
+    IProductGroupBySlugQueryVariables
+  >
+) {
+  return Apollo.useLazyQuery<
+    IProductGroupBySlugQuery,
+    IProductGroupBySlugQueryVariables
+  >(ProductGroupBySlugDocument, baseOptions);
+}
+export type ProductGroupBySlugQueryHookResult = ReturnType<
+  typeof useProductGroupBySlugQuery
+>;
+export type ProductGroupBySlugLazyQueryHookResult = ReturnType<
+  typeof useProductGroupBySlugLazyQuery
+>;
+export type ProductGroupBySlugQueryResult = Apollo.QueryResult<
+  IProductGroupBySlugQuery,
+  IProductGroupBySlugQueryVariables
+>;
 export const ProdukteIndexDocument = gql`
   query ProdukteIndex {
     produkte {
