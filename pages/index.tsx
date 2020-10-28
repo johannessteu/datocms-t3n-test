@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import * as React from 'react';
 
 import { H1, Heading, Section } from '@t3n/components';
@@ -8,6 +9,7 @@ const Home = () => {
     <Layout>
       <Section variant="primary">
         <H1>DatoCMS Prototyp</H1>
+        <Link href="/produkte">Produkte</Link>
       </Section>
     </Layout>
   );

@@ -15,7 +15,7 @@ import {
 
 interface ProductGroupInterface {
   id: IProductGroupBySlugQuery['productgroup']['id'];
-  titel: IProductGroupBySlugQuery['productgroup']['titel'];
+  titel?: IProductGroupBySlugQuery['productgroup']['titel'];
   beschreibung?: IProductGroupBySlugQuery['productgroup']['beschreibung'];
   content?: IProductGroupBySlugQuery['productgroup']['content'];
   products: IProductGroupBySlugQuery['productgroup']['produkte'];
