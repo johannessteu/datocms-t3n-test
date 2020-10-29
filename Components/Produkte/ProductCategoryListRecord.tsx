@@ -30,10 +30,7 @@ const ProductCategoryListRecord: React.FC<{
 
       <Grid mt={2}>
         {record.productcategories.map((p) => (
-          <GridItem
-            key={p.id}
-            width={[1, 1, 1 / record.productcategories.length]}
-          >
+          <GridItem key={p.id} width={[1, 1, 1 / 3]}>
             <Link href={`/produkte/${p.slug}`}>
               <Card>{p.titel}</Card>
             </Link>
