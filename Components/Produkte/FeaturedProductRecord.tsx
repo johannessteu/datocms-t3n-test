@@ -78,8 +78,12 @@ const ProductCardGrid: React.FC<{
         }
 
         const apiNews = newsData.find((el) => {
-          return el.identifier.substr(13) === n.newsIdentifier;
+          return el.identifier === n.newsIdentifier;
         });
+
+        if (!apiNews) {
+          return null;
+        }
 
         return (
           <GridItem width={[1, 1, 1 / 3]}>
