@@ -1,13 +1,12 @@
 import { ApolloProvider } from '@apollo/client';
 import { theme } from '@t3n/theme';
 import { AppProps } from 'next/app';
-import { GlobalStyle } from '@t3n/components';
 import React from 'react';
 import { ThemeProvider } from 'styled-components';
-import useDatoCmsClient from '../hooks/useDatoCmsClient';
+import useT3nApolloClient from '../hooks/useApolloClient';
 
 const App = ({ Component, pageProps }: AppProps) => {
-  const apolloClient = useDatoCmsClient();
+  const apolloClient = useT3nApolloClient();
 
   return (
     <ApolloProvider client={apolloClient}>
