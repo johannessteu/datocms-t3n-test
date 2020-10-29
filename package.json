@@ -20,6 +20,7 @@
     "@types/styled-components": "^5.1.4",
     "@types/styled-system": "^5.1.10",
     "btoa": "^1.2.1",
+    "datocms-client": "^3.1.3",
     "graphql": "^15.3.0",
     "graphql-tag": "^2.11.0",
     "marked": "^1.2.2",
