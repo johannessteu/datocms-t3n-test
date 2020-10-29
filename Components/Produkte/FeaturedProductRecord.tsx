@@ -21,7 +21,7 @@ import Markdown from '../Markdown';
 
 const ProductCardGrid: React.FC<{
   news: { id: string; titel: string; newsIdentifier: string }[];
-}> = ({ news, children }) => {
+}> = ({ news }) => {
   const client = useApolloClient();
   const [loading, setLoading] = useState(true);
   const [newsData, setNewsData] = useState<
@@ -32,26 +32,28 @@ const ProductCardGrid: React.FC<{
     }[]
   >([]);
 
-  useEffect(async () => {
+  useEffect(() => {
     const newsIdentifiers = news.map((e) => e.newsIdentifier);
 
-    const res = await client.query({
-      query: gql`
-        query NewsByIdentifier($identifiers: [ID!]!) {
-          article {
-            newsByIdentifiers(identifiers: $identifiers) {
-              identifier
-              imageUrl
-              url
+    client
+      .query({
+        query: gql`
+          query NewsByIdentifier($identifiers: [ID!]!) {
+            article {
+              newsByIdentifiers(identifiers: $identifiers) {
+                identifier
+                imageUrl
+                url
+              }
             }
           }
-        }
-      `,
-      variables: { identifiers: newsIdentifiers },
-    });
-
-    setNewsData(res.data.article.newsByIdentifiers);
-    setLoading(false);
+        `,
+        variables: { identifiers: newsIdentifiers },
+      })
+      .then((res) => {
+        setNewsData(res.data.article.newsByIdentifiers);
+        setLoading(false);
+      });
   }, []);
 
   if (loading) {
