@@ -1,4 +1,4 @@
-import { Content, GlobalStyle, PageLayout } from '@t3n/components';
+import { GlobalStyle, PageLayout } from '@t3n/components';
 import * as React from 'react';
 
 const Layout: React.FC = ({ children }) => {

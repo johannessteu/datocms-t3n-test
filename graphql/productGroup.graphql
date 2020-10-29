@@ -33,6 +33,9 @@ query ProductGroupBySlug ($slug: String!) {
             id
             newsIdentifier
             titel
+            teaser
+            sponsored
+            highlight
         }
     }
 }

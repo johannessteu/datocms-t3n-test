@@ -1,11 +1,26 @@
-import { Card, Grid, GridItem, H1, Section } from '@t3n/components';
+import {
+  Card,
+  CardHeader,
+  Grid,
+  GridItem,
+  H1,
+  Box,
+  Section,
+  Text,
+  Heading,
+  TagList,
+  Tag,
+} from '@t3n/components';
+import { useState } from 'react';
 import * as React from 'react';
 import gql from 'graphql-tag';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
+import styled from 'styled-components';
 import Layout from '../../Components/Layout';
 import Markdown from '../../Components/Markdown';
 import FeaturedProductRecord from '../../Components/Produkte/FeaturedProductRecord';
 import ProductCategoryListRecord from '../../Components/Produkte/ProductCategoryListRecord';
+import { createT3nApolloClient } from '../../hooks/useApolloClient';
 import { createDatoCmsClient } from '../../hooks/useDatoCmsClient';
 import {
   IProductGroupBySlugQuery,
@@ -18,8 +33,22 @@ interface ProductGroupInterface {
   titel?: IProductGroupBySlugQuery['productgroup']['titel'];
   beschreibung?: IProductGroupBySlugQuery['productgroup']['beschreibung'];
   content?: IProductGroupBySlugQuery['productgroup']['content'];
-  products: IProductGroupBySlugQuery['productgroup']['produkte'];
+  products: {
+    imageUrl: string;
+    title: string;
+    tags: string[];
+    teaser: string;
+    url: string;
+    identifier: string;
+    sponsored: boolean;
+    highlight: boolean;
+  }[];
 }
+
+const StyledText = styled(Text)`
+  position: absolute;
+  top: -10px;
+`;
 
 const ProductGroup: NextPage<ProductGroupInterface> = ({
   titel,
@@ -27,6 +56,47 @@ const ProductGroup: NextPage<ProductGroupInterface> = ({
   beschreibung,
   content,
 }) => {
+  const [filteredTags, setFilteredTags] = useState([]);
+
+  const allTags = products
+    .reduce((prev, curr) => {
+      const toAdd = [];
+      curr.tags.forEach((t) => {
+        if (prev.indexOf(t) === -1) {
+          toAdd.push(t);
+        }
+      });
+
+      return [...prev, ...toAdd];
+    }, [])
+    .sort();
+
+  allTags
+    .sort(
+      (a, b) =>
+        allTags.filter((c) => b === c).length -
+        allTags.filter((c) => a === c).length
+    )
+    // Only keep first occurring item
+    .reduce(
+      (reducedTags, tag) =>
+        reducedTags.find((t) => t === tag)
+          ? reducedTags
+          : [...reducedTags, tag],
+      []
+    )
+    // Only keep items that exist at least 2 times or fill list with at least 6 tags
+    .filter((tag, i) => allTags.filter((t) => t === tag).length > 2 || i < 6);
+
+  const handleTagClick = (t) => {
+    console.log(t);
+    if (!filteredTags.includes(t)) {
+      setFilteredTags([...filteredTags, t]);
+    } else {
+      setFilteredTags(filteredTags.filter((tag) => tag !== t));
+    }
+  };
+
   return (
     <Layout>
       <Section>
@@ -45,12 +115,49 @@ const ProductGroup: NextPage<ProductGroupInterface> = ({
       })}
 
       <Section variant="primary">
-        <Grid>
-          {products.map((p) => (
-            <GridItem id={p.id} width={[1, 1, 1 / 3]}>
-              <Card>{p.titel}</Card>
-            </GridItem>
+        <TagList
+          tags={allTags.map((t) => (
+            <Tag
+              colorVariant={
+                filteredTags.indexOf(t) === -1 ? 'secondary' : 'inverse'
+              }
+              mr={2}
+              key={t}
+              onClick={() => handleTagClick(t)}
+            >
+              {t}
+            </Tag>
           ))}
+          collapseAfter={8}
+        />
+        <Grid mt={5}>
+          {products.map((p) => {
+            if (
+              filteredTags.length > 0 &&
+              p.tags.filter((el) => filteredTags.includes(el)).length === 0
+            ) {
+              return null;
+            }
+
+            return (
+              <GridItem id={p.identifier} width={[1, 1, 1 / 3]}>
+                <Card>
+                  <CardHeader ratio={16 / 9} image={p.imageUrl} />
+                  <Box position="relative">
+                    {p.sponsored && (
+                      <StyledText small secondary my={0}>
+                        Anzeige
+                      </StyledText>
+                    )}
+                    <Heading styleAs="h5" as="h3" my={3}>
+                      {p.title}
+                    </Heading>
+                    <Text>{p.teaser}</Text>
+                  </Box>
+                </Card>
+              </GridItem>
+            );
+          })}
         </Grid>
       </Section>
     </Layout>
@@ -86,6 +193,7 @@ export const getStaticProps: GetStaticProps<
   { group: string }
 > = async ({ preview, params }) => {
   const client = createDatoCmsClient(preview);
+  const t3nClient = createT3nApolloClient();
 
   const { data } = await client.query<
     IProductGroupBySlugQuery,
@@ -97,10 +205,55 @@ export const getStaticProps: GetStaticProps<
 
   const { produkte, ...rest } = data.productgroup;
 
+  const newsIdentifiers = produkte.map((p) => p.newsIdentifier.substr(13));
+
+  const { data: newsData } = await t3nClient.query({
+    query: gql`
+      query ProdctGroupNews($identifiers: [ID!]!) {
+        article {
+          newsByIdentifiers(identifiers: $identifiers) {
+            identifier
+            url
+            imageUrl
+            title
+            tags {
+              title
+            }
+            teaser
+          }
+        }
+      }
+    `,
+    variables: { identifiers: newsIdentifiers },
+  });
+
+  const products: ProductGroupInterface['products'] = [];
+
+  produkte.forEach((p) => {
+    const theNews = newsData.article.newsByIdentifiers.find(
+      (el) => el.identifier === p.newsIdentifier
+    );
+
+    if (theNews) {
+      products.push({
+        imageUrl: theNews.imageUrl,
+        url: theNews.url,
+        tags: theNews.tags.map((e) => e.title),
+        identifier: p.id,
+        title: p.titel || theNews.title,
+        teaser: p.teaser || theNews.teaser,
+        sponsored: p.sponsored,
+        highlight: p.highlight,
+      });
+    }
+  });
+
+  console.log(products);
+
   return {
     props: {
       ...rest,
-      products: produkte,
+      products,
     },
     revalidate: 3600,
   };

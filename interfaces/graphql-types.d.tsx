@@ -17,13 +17,13 @@ export type Scalars = {
   MetaTagAttributes: any;
   /** Represents `true` or `false` values. */
   BooleanType: any;
-  UploadId: any;
   /** Represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. */
   IntType: any;
+  JsonField: any;
+  UploadId: any;
   CustomData: any;
   /** Represents signed double-precision fractional values as specified by [IEEE 754](http://en.wikipedia.org/wiki/IEEE_floating_point). */
   FloatType: any;
-  JsonField: any;
 };
 
 /** The query root for this schema */
@@ -170,11 +170,11 @@ export type IProduktRecord = {
   _seoMetaTags: Array<ITag>;
   _status: IItemStatus;
   _updatedAt: Scalars['DateTime'];
-  bild?: Maybe<IFileField>;
   createdAt: Scalars['DateTime'];
   highlight?: Maybe<Scalars['BooleanType']>;
   id: Scalars['ItemId'];
   newsIdentifier?: Maybe<Scalars['String']>;
+  sponsored?: Maybe<Scalars['BooleanType']>;
   tags?: Maybe<Scalars['String']>;
   teaser?: Maybe<Scalars['String']>;
   titel?: Maybe<Scalars['String']>;
@@ -207,6 +207,334 @@ export enum IItemStatus {
   Updated = 'updated',
   Published = 'published',
 }
+
+export type IProduktModelFilter = {
+  _createdAt?: Maybe<ICreatedAtFilter>;
+  createdAt?: Maybe<ICreatedAtFilter>;
+  id?: Maybe<IItemIdFilter>;
+  _firstPublishedAt?: Maybe<IPublishedAtFilter>;
+  _publicationScheduledAt?: Maybe<IPublishedAtFilter>;
+  _publishedAt?: Maybe<IPublishedAtFilter>;
+  _status?: Maybe<IStatusFilter>;
+  _updatedAt?: Maybe<IUpdatedAtFilter>;
+  updatedAt?: Maybe<IUpdatedAtFilter>;
+  _isValid?: Maybe<IBooleanFilter>;
+  sponsored?: Maybe<IBooleanFilter>;
+  teaser?: Maybe<ITextFilter>;
+  tags?: Maybe<IStringFilter>;
+  highlight?: Maybe<IBooleanFilter>;
+  newsIdentifier?: Maybe<IStringFilter>;
+  titel?: Maybe<IStringFilter>;
+  OR?: Maybe<Array<Maybe<IProduktModelFilter>>>;
+};
+
+/** Specifies how to filter by creation datetime */
+export type ICreatedAtFilter = {
+  /** Filter records with a value that's strictly greater than the one specified */
+  gt?: Maybe<Scalars['DateTime']>;
+  /** Filter records with a value that's less than the one specified */
+  lt?: Maybe<Scalars['DateTime']>;
+  /** Filter records with a value that's greater than or equal to than the one specified */
+  gte?: Maybe<Scalars['DateTime']>;
+  /** Filter records with a value that's less or equal than the one specified */
+  lte?: Maybe<Scalars['DateTime']>;
+  /** Filter records with the specified field defined (i.e. with any value) or not */
+  exists?: Maybe<Scalars['BooleanType']>;
+  /** Search for records with an exact match (seconds are truncated) */
+  eq?: Maybe<Scalars['DateTime']>;
+  /** Exclude records with an exact match */
+  neq?: Maybe<Scalars['DateTime']>;
+};
+
+/** Specifies how to filter by ID */
+export type IItemIdFilter = {
+  /** Search the record with the specified ID */
+  eq?: Maybe<Scalars['ItemId']>;
+  /** Exclude the record with the specified ID */
+  neq?: Maybe<Scalars['ItemId']>;
+  /** Search records with the specified IDs */
+  in?: Maybe<Array<Maybe<Scalars['ItemId']>>>;
+  /** Search records that do not have the specified IDs */
+  notIn?: Maybe<Array<Maybe<Scalars['ItemId']>>>;
+};
+
+/** Specifies how to filter by publication datetime */
+export type IPublishedAtFilter = {
+  /** Filter records with a value that's strictly greater than the one specified */
+  gt?: Maybe<Scalars['DateTime']>;
+  /** Filter records with a value that's less than the one specified */
+  lt?: Maybe<Scalars['DateTime']>;
+  /** Filter records with a value that's greater than or equal to than the one specified */
+  gte?: Maybe<Scalars['DateTime']>;
+  /** Filter records with a value that's less or equal than the one specified */
+  lte?: Maybe<Scalars['DateTime']>;
+  /** Filter records with the specified field defined (i.e. with any value) or not */
+  exists?: Maybe<Scalars['BooleanType']>;
+  /** Search for records with an exact match (seconds are truncated) */
+  eq?: Maybe<Scalars['DateTime']>;
+  /** Exclude records with an exact match */
+  neq?: Maybe<Scalars['DateTime']>;
+};
+
+/** Specifies how to filter by status */
+export type IStatusFilter = {
+  /** Search the record with the specified status */
+  eq?: Maybe<IItemStatus>;
+  /** Exclude the record with the specified status */
+  neq?: Maybe<IItemStatus>;
+  /** Search records with the specified statuses */
+  in?: Maybe<Array<Maybe<IItemStatus>>>;
+  /** Search records without the specified statuses */
+  notIn?: Maybe<Array<Maybe<IItemStatus>>>;
+};
+
+/** Specifies how to filter by update datetime */
+export type IUpdatedAtFilter = {
+  /** Filter records with a value that's strictly greater than the one specified */
+  gt?: Maybe<Scalars['DateTime']>;
+  /** Filter records with a value that's less than the one specified */
+  lt?: Maybe<Scalars['DateTime']>;
+  /** Filter records with a value that's greater than or equal to than the one specified */
+  gte?: Maybe<Scalars['DateTime']>;
+  /** Filter records with a value that's less or equal than the one specified */
+  lte?: Maybe<Scalars['DateTime']>;
+  /** Filter records with the specified field defined (i.e. with any value) or not */
+  exists?: Maybe<Scalars['BooleanType']>;
+  /** Search for records with an exact match (seconds are truncated) */
+  eq?: Maybe<Scalars['DateTime']>;
+  /** Exclude records with an exact match */
+  neq?: Maybe<Scalars['DateTime']>;
+};
+
+/** Specifies how to filter Boolean fields */
+export type IBooleanFilter = {
+  /** Search for records with an exact match */
+  eq?: Maybe<Scalars['BooleanType']>;
+};
+
+/** Specifies how to filter text fields */
+export type ITextFilter = {
+  /** Filter records based on a regular expression */
+  matches?: Maybe<IStringMatchesFilter>;
+  /** Exclude records based on a regular expression */
+  notMatches?: Maybe<IStringMatchesFilter>;
+  /** Filter records with the specified field defined (i.e. with any value) or not */
+  exists?: Maybe<Scalars['BooleanType']>;
+};
+
+export type IStringMatchesFilter = {
+  pattern: Scalars['String'];
+  caseSensitive?: Maybe<Scalars['BooleanType']>;
+  regexp?: Maybe<Scalars['BooleanType']>;
+};
+
+/** Specifies how to filter Single-line string fields */
+export type IStringFilter = {
+  /** Filter records based on a regular expression */
+  matches?: Maybe<IStringMatchesFilter>;
+  /** Exclude records based on a regular expression */
+  notMatches?: Maybe<IStringMatchesFilter>;
+  /** Filter records with the specified field defined (i.e. with any value) or not */
+  exists?: Maybe<Scalars['BooleanType']>;
+  /** Search for records with an exact match */
+  eq?: Maybe<Scalars['String']>;
+  /** Exclude records with an exact match */
+  neq?: Maybe<Scalars['String']>;
+  /** Filter records that equal one of the specified values */
+  in?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** Filter records that do not equal one of the specified values */
+  notIn?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
+export enum IProduktModelOrderBy {
+  CreatedAtAsc = 'createdAt_ASC',
+  CreatedAtDesc = 'createdAt_DESC',
+  IdAsc = 'id_ASC',
+  IdDesc = 'id_DESC',
+  FirstPublishedAtAsc = '_firstPublishedAt_ASC',
+  FirstPublishedAtDesc = '_firstPublishedAt_DESC',
+  PublicationScheduledAtAsc = '_publicationScheduledAt_ASC',
+  PublicationScheduledAtDesc = '_publicationScheduledAt_DESC',
+  PublishedAtAsc = '_publishedAt_ASC',
+  PublishedAtDesc = '_publishedAt_DESC',
+  StatusAsc = '_status_ASC',
+  StatusDesc = '_status_DESC',
+  UpdatedAtAsc = 'updatedAt_ASC',
+  UpdatedAtDesc = 'updatedAt_DESC',
+  IsValidAsc = '_isValid_ASC',
+  IsValidDesc = '_isValid_DESC',
+  SponsoredAsc = 'sponsored_ASC',
+  SponsoredDesc = 'sponsored_DESC',
+  TagsAsc = 'tags_ASC',
+  TagsDesc = 'tags_DESC',
+  HighlightAsc = 'highlight_ASC',
+  HighlightDesc = 'highlight_DESC',
+  NewsIdentifierAsc = 'newsIdentifier_ASC',
+  NewsIdentifierDesc = 'newsIdentifier_DESC',
+  TitelAsc = 'titel_ASC',
+  TitelDesc = 'titel_DESC',
+}
+
+export type ICollectionMetadata = {
+  __typename?: 'CollectionMetadata';
+  count: Scalars['IntType'];
+};
+
+/** Record of type Produkte (produkte) */
+export type IProdukteRecord = {
+  __typename?: 'ProdukteRecord';
+  _createdAt: Scalars['DateTime'];
+  _firstPublishedAt?: Maybe<Scalars['DateTime']>;
+  _isValid: Scalars['BooleanType'];
+  _modelApiKey: Scalars['String'];
+  _publicationScheduledAt?: Maybe<Scalars['DateTime']>;
+  _publishedAt?: Maybe<Scalars['DateTime']>;
+  /** SEO meta tags */
+  _seoMetaTags: Array<ITag>;
+  _status: IItemStatus;
+  _updatedAt: Scalars['DateTime'];
+  beschreibungstext?: Maybe<Scalars['String']>;
+  content?: Maybe<Array<Maybe<IProdukteModelContentField>>>;
+  createdAt: Scalars['DateTime'];
+  id: Scalars['ItemId'];
+  previewlink?: Maybe<Scalars['JsonField']>;
+  seoTags?: Maybe<ISeoField>;
+  titel?: Maybe<Scalars['String']>;
+  updatedAt: Scalars['DateTime'];
+};
+
+/** Record of type Produkte (produkte) */
+export type IProdukteRecord_SeoMetaTagsArgs = {
+  locale?: Maybe<ISiteLocale>;
+};
+
+/** Record of type Produkte (produkte) */
+export type IProdukteRecordBeschreibungstextArgs = {
+  markdown?: Maybe<Scalars['Boolean']>;
+};
+
+export type IProdukteModelContentField =
+  | IProductcategorylistRecord
+  | IFeaturedproductlistRecord;
+
+/** Record of type Auflistung von Produkt Kategorien  (productcategorylist) */
+export type IProductcategorylistRecord = {
+  __typename?: 'ProductcategorylistRecord';
+  _createdAt: Scalars['DateTime'];
+  _firstPublishedAt?: Maybe<Scalars['DateTime']>;
+  _isValid: Scalars['BooleanType'];
+  _modelApiKey: Scalars['String'];
+  _publicationScheduledAt?: Maybe<Scalars['DateTime']>;
+  _publishedAt?: Maybe<Scalars['DateTime']>;
+  /** SEO meta tags */
+  _seoMetaTags: Array<ITag>;
+  _status: IItemStatus;
+  _updatedAt: Scalars['DateTime'];
+  beschreibungstext?: Maybe<Scalars['String']>;
+  createdAt: Scalars['DateTime'];
+  headline?: Maybe<Scalars['String']>;
+  id: Scalars['ItemId'];
+  insection?: Maybe<Scalars['BooleanType']>;
+  productcategories: Array<IProductgroupRecord>;
+  sectionvariant?: Maybe<Scalars['String']>;
+  updatedAt: Scalars['DateTime'];
+};
+
+/** Record of type Auflistung von Produkt Kategorien  (productcategorylist) */
+export type IProductcategorylistRecord_SeoMetaTagsArgs = {
+  locale?: Maybe<ISiteLocale>;
+};
+
+/** Record of type Auflistung von Produkt Kategorien  (productcategorylist) */
+export type IProductcategorylistRecordBeschreibungstextArgs = {
+  markdown?: Maybe<Scalars['Boolean']>;
+};
+
+/** Record of type ProduktGruppe (productgroup) */
+export type IProductgroupRecord = {
+  __typename?: 'ProductgroupRecord';
+  _createdAt: Scalars['DateTime'];
+  _firstPublishedAt?: Maybe<Scalars['DateTime']>;
+  _isValid: Scalars['BooleanType'];
+  _modelApiKey: Scalars['String'];
+  _publicationScheduledAt?: Maybe<Scalars['DateTime']>;
+  _publishedAt?: Maybe<Scalars['DateTime']>;
+  /** SEO meta tags */
+  _seoMetaTags: Array<ITag>;
+  _status: IItemStatus;
+  _updatedAt: Scalars['DateTime'];
+  beschreibung?: Maybe<Scalars['String']>;
+  content?: Maybe<Array<Maybe<IProductgroupModelContentField>>>;
+  createdAt: Scalars['DateTime'];
+  id: Scalars['ItemId'];
+  preview?: Maybe<Scalars['JsonField']>;
+  produkte: Array<IProduktRecord>;
+  seo?: Maybe<ISeoField>;
+  seoText?: Maybe<Scalars['String']>;
+  slug?: Maybe<Scalars['String']>;
+  titel?: Maybe<Scalars['String']>;
+  updatedAt: Scalars['DateTime'];
+};
+
+/** Record of type ProduktGruppe (productgroup) */
+export type IProductgroupRecord_SeoMetaTagsArgs = {
+  locale?: Maybe<ISiteLocale>;
+};
+
+/** Record of type ProduktGruppe (productgroup) */
+export type IProductgroupRecordBeschreibungArgs = {
+  markdown?: Maybe<Scalars['Boolean']>;
+};
+
+/** Record of type ProduktGruppe (productgroup) */
+export type IProductgroupRecordSeoTextArgs = {
+  markdown?: Maybe<Scalars['Boolean']>;
+};
+
+export type IProductgroupModelContentField =
+  | IProductcategorylistRecord
+  | IFeaturedproductlistRecord;
+
+/** Record of type Auflistung von Featured Produkte (featuredproductlist) */
+export type IFeaturedproductlistRecord = {
+  __typename?: 'FeaturedproductlistRecord';
+  _createdAt: Scalars['DateTime'];
+  _firstPublishedAt?: Maybe<Scalars['DateTime']>;
+  _isValid: Scalars['BooleanType'];
+  _modelApiKey: Scalars['String'];
+  _publicationScheduledAt?: Maybe<Scalars['DateTime']>;
+  _publishedAt?: Maybe<Scalars['DateTime']>;
+  /** SEO meta tags */
+  _seoMetaTags: Array<ITag>;
+  _status: IItemStatus;
+  _updatedAt: Scalars['DateTime'];
+  beschreibung?: Maybe<Scalars['String']>;
+  createdAt: Scalars['DateTime'];
+  headline?: Maybe<Scalars['String']>;
+  id: Scalars['ItemId'];
+  limit?: Maybe<Scalars['IntType']>;
+  onlyhighlighted?: Maybe<Scalars['BooleanType']>;
+  products: Array<IProduktRecord>;
+  updatedAt: Scalars['DateTime'];
+};
+
+/** Record of type Auflistung von Featured Produkte (featuredproductlist) */
+export type IFeaturedproductlistRecord_SeoMetaTagsArgs = {
+  locale?: Maybe<ISiteLocale>;
+};
+
+/** Record of type Auflistung von Featured Produkte (featuredproductlist) */
+export type IFeaturedproductlistRecordBeschreibungArgs = {
+  markdown?: Maybe<Scalars['Boolean']>;
+};
+
+export type ISeoField = {
+  __typename?: 'SeoField';
+  description?: Maybe<Scalars['String']>;
+  image?: Maybe<IFileField>;
+  title?: Maybe<Scalars['String']>;
+  twitterCard?: Maybe<Scalars['String']>;
+};
 
 export type IFileField = {
   __typename?: 'FileField';
@@ -1613,345 +1941,6 @@ export enum IVideoMp4Res {
   High = 'high',
 }
 
-export type IProduktModelFilter = {
-  _createdAt?: Maybe<ICreatedAtFilter>;
-  createdAt?: Maybe<ICreatedAtFilter>;
-  id?: Maybe<IItemIdFilter>;
-  _firstPublishedAt?: Maybe<IPublishedAtFilter>;
-  _publicationScheduledAt?: Maybe<IPublishedAtFilter>;
-  _publishedAt?: Maybe<IPublishedAtFilter>;
-  _status?: Maybe<IStatusFilter>;
-  _updatedAt?: Maybe<IUpdatedAtFilter>;
-  updatedAt?: Maybe<IUpdatedAtFilter>;
-  _isValid?: Maybe<IBooleanFilter>;
-  teaser?: Maybe<ITextFilter>;
-  highlight?: Maybe<IBooleanFilter>;
-  newsIdentifier?: Maybe<IStringFilter>;
-  tags?: Maybe<IStringFilter>;
-  bild?: Maybe<IFileFilter>;
-  titel?: Maybe<IStringFilter>;
-  OR?: Maybe<Array<Maybe<IProduktModelFilter>>>;
-};
-
-/** Specifies how to filter by creation datetime */
-export type ICreatedAtFilter = {
-  /** Filter records with a value that's strictly greater than the one specified */
-  gt?: Maybe<Scalars['DateTime']>;
-  /** Filter records with a value that's less than the one specified */
-  lt?: Maybe<Scalars['DateTime']>;
-  /** Filter records with a value that's greater than or equal to than the one specified */
-  gte?: Maybe<Scalars['DateTime']>;
-  /** Filter records with a value that's less or equal than the one specified */
-  lte?: Maybe<Scalars['DateTime']>;
-  /** Filter records with the specified field defined (i.e. with any value) or not */
-  exists?: Maybe<Scalars['BooleanType']>;
-  /** Search for records with an exact match (seconds are truncated) */
-  eq?: Maybe<Scalars['DateTime']>;
-  /** Exclude records with an exact match */
-  neq?: Maybe<Scalars['DateTime']>;
-};
-
-/** Specifies how to filter by ID */
-export type IItemIdFilter = {
-  /** Search the record with the specified ID */
-  eq?: Maybe<Scalars['ItemId']>;
-  /** Exclude the record with the specified ID */
-  neq?: Maybe<Scalars['ItemId']>;
-  /** Search records with the specified IDs */
-  in?: Maybe<Array<Maybe<Scalars['ItemId']>>>;
-  /** Search records that do not have the specified IDs */
-  notIn?: Maybe<Array<Maybe<Scalars['ItemId']>>>;
-};
-
-/** Specifies how to filter by publication datetime */
-export type IPublishedAtFilter = {
-  /** Filter records with a value that's strictly greater than the one specified */
-  gt?: Maybe<Scalars['DateTime']>;
-  /** Filter records with a value that's less than the one specified */
-  lt?: Maybe<Scalars['DateTime']>;
-  /** Filter records with a value that's greater than or equal to than the one specified */
-  gte?: Maybe<Scalars['DateTime']>;
-  /** Filter records with a value that's less or equal than the one specified */
-  lte?: Maybe<Scalars['DateTime']>;
-  /** Filter records with the specified field defined (i.e. with any value) or not */
-  exists?: Maybe<Scalars['BooleanType']>;
-  /** Search for records with an exact match (seconds are truncated) */
-  eq?: Maybe<Scalars['DateTime']>;
-  /** Exclude records with an exact match */
-  neq?: Maybe<Scalars['DateTime']>;
-};
-
-/** Specifies how to filter by status */
-export type IStatusFilter = {
-  /** Search the record with the specified status */
-  eq?: Maybe<IItemStatus>;
-  /** Exclude the record with the specified status */
-  neq?: Maybe<IItemStatus>;
-  /** Search records with the specified statuses */
-  in?: Maybe<Array<Maybe<IItemStatus>>>;
-  /** Search records without the specified statuses */
-  notIn?: Maybe<Array<Maybe<IItemStatus>>>;
-};
-
-/** Specifies how to filter by update datetime */
-export type IUpdatedAtFilter = {
-  /** Filter records with a value that's strictly greater than the one specified */
-  gt?: Maybe<Scalars['DateTime']>;
-  /** Filter records with a value that's less than the one specified */
-  lt?: Maybe<Scalars['DateTime']>;
-  /** Filter records with a value that's greater than or equal to than the one specified */
-  gte?: Maybe<Scalars['DateTime']>;
-  /** Filter records with a value that's less or equal than the one specified */
-  lte?: Maybe<Scalars['DateTime']>;
-  /** Filter records with the specified field defined (i.e. with any value) or not */
-  exists?: Maybe<Scalars['BooleanType']>;
-  /** Search for records with an exact match (seconds are truncated) */
-  eq?: Maybe<Scalars['DateTime']>;
-  /** Exclude records with an exact match */
-  neq?: Maybe<Scalars['DateTime']>;
-};
-
-/** Specifies how to filter Boolean fields */
-export type IBooleanFilter = {
-  /** Search for records with an exact match */
-  eq?: Maybe<Scalars['BooleanType']>;
-};
-
-/** Specifies how to filter text fields */
-export type ITextFilter = {
-  /** Filter records based on a regular expression */
-  matches?: Maybe<IStringMatchesFilter>;
-  /** Exclude records based on a regular expression */
-  notMatches?: Maybe<IStringMatchesFilter>;
-  /** Filter records with the specified field defined (i.e. with any value) or not */
-  exists?: Maybe<Scalars['BooleanType']>;
-};
-
-export type IStringMatchesFilter = {
-  pattern: Scalars['String'];
-  caseSensitive?: Maybe<Scalars['BooleanType']>;
-  regexp?: Maybe<Scalars['BooleanType']>;
-};
-
-/** Specifies how to filter Single-line string fields */
-export type IStringFilter = {
-  /** Filter records based on a regular expression */
-  matches?: Maybe<IStringMatchesFilter>;
-  /** Exclude records based on a regular expression */
-  notMatches?: Maybe<IStringMatchesFilter>;
-  /** Filter records with the specified field defined (i.e. with any value) or not */
-  exists?: Maybe<Scalars['BooleanType']>;
-  /** Search for records with an exact match */
-  eq?: Maybe<Scalars['String']>;
-  /** Exclude records with an exact match */
-  neq?: Maybe<Scalars['String']>;
-  /** Filter records that equal one of the specified values */
-  in?: Maybe<Array<Maybe<Scalars['String']>>>;
-  /** Filter records that do not equal one of the specified values */
-  notIn?: Maybe<Array<Maybe<Scalars['String']>>>;
-};
-
-/** Specifies how to filter Single-file/image fields */
-export type IFileFilter = {
-  /** Search for records with an exact match. The specified value must be an Upload ID */
-  eq?: Maybe<Scalars['UploadId']>;
-  /** Exclude records with an exact match. The specified value must be an Upload ID */
-  neq?: Maybe<Scalars['UploadId']>;
-  /** Filter records that have one of the specified uploads */
-  in?: Maybe<Array<Maybe<Scalars['UploadId']>>>;
-  /** Filter records that do not have one of the specified uploads */
-  notIn?: Maybe<Array<Maybe<Scalars['UploadId']>>>;
-  /** Filter records with the specified field defined (i.e. with any value) or not */
-  exists?: Maybe<Scalars['BooleanType']>;
-};
-
-export enum IProduktModelOrderBy {
-  CreatedAtAsc = 'createdAt_ASC',
-  CreatedAtDesc = 'createdAt_DESC',
-  IdAsc = 'id_ASC',
-  IdDesc = 'id_DESC',
-  FirstPublishedAtAsc = '_firstPublishedAt_ASC',
-  FirstPublishedAtDesc = '_firstPublishedAt_DESC',
-  PublicationScheduledAtAsc = '_publicationScheduledAt_ASC',
-  PublicationScheduledAtDesc = '_publicationScheduledAt_DESC',
-  PublishedAtAsc = '_publishedAt_ASC',
-  PublishedAtDesc = '_publishedAt_DESC',
-  StatusAsc = '_status_ASC',
-  StatusDesc = '_status_DESC',
-  UpdatedAtAsc = 'updatedAt_ASC',
-  UpdatedAtDesc = 'updatedAt_DESC',
-  IsValidAsc = '_isValid_ASC',
-  IsValidDesc = '_isValid_DESC',
-  HighlightAsc = 'highlight_ASC',
-  HighlightDesc = 'highlight_DESC',
-  NewsIdentifierAsc = 'newsIdentifier_ASC',
-  NewsIdentifierDesc = 'newsIdentifier_DESC',
-  TagsAsc = 'tags_ASC',
-  TagsDesc = 'tags_DESC',
-  TitelAsc = 'titel_ASC',
-  TitelDesc = 'titel_DESC',
-}
-
-export type ICollectionMetadata = {
-  __typename?: 'CollectionMetadata';
-  count: Scalars['IntType'];
-};
-
-/** Record of type Produkte (produkte) */
-export type IProdukteRecord = {
-  __typename?: 'ProdukteRecord';
-  _createdAt: Scalars['DateTime'];
-  _firstPublishedAt?: Maybe<Scalars['DateTime']>;
-  _isValid: Scalars['BooleanType'];
-  _modelApiKey: Scalars['String'];
-  _publicationScheduledAt?: Maybe<Scalars['DateTime']>;
-  _publishedAt?: Maybe<Scalars['DateTime']>;
-  /** SEO meta tags */
-  _seoMetaTags: Array<ITag>;
-  _status: IItemStatus;
-  _updatedAt: Scalars['DateTime'];
-  beschreibungstext?: Maybe<Scalars['String']>;
-  content?: Maybe<Array<Maybe<IProdukteModelContentField>>>;
-  createdAt: Scalars['DateTime'];
-  id: Scalars['ItemId'];
-  previewlink?: Maybe<Scalars['JsonField']>;
-  seoTags?: Maybe<ISeoField>;
-  titel?: Maybe<Scalars['String']>;
-  updatedAt: Scalars['DateTime'];
-};
-
-/** Record of type Produkte (produkte) */
-export type IProdukteRecord_SeoMetaTagsArgs = {
-  locale?: Maybe<ISiteLocale>;
-};
-
-/** Record of type Produkte (produkte) */
-export type IProdukteRecordBeschreibungstextArgs = {
-  markdown?: Maybe<Scalars['Boolean']>;
-};
-
-export type IProdukteModelContentField =
-  | IProductcategorylistRecord
-  | IFeaturedproductlistRecord;
-
-/** Record of type Auflistung von Produkt Kategorien  (productcategorylist) */
-export type IProductcategorylistRecord = {
-  __typename?: 'ProductcategorylistRecord';
-  _createdAt: Scalars['DateTime'];
-  _firstPublishedAt?: Maybe<Scalars['DateTime']>;
-  _isValid: Scalars['BooleanType'];
-  _modelApiKey: Scalars['String'];
-  _publicationScheduledAt?: Maybe<Scalars['DateTime']>;
-  _publishedAt?: Maybe<Scalars['DateTime']>;
-  /** SEO meta tags */
-  _seoMetaTags: Array<ITag>;
-  _status: IItemStatus;
-  _updatedAt: Scalars['DateTime'];
-  beschreibungstext?: Maybe<Scalars['String']>;
-  createdAt: Scalars['DateTime'];
-  headline?: Maybe<Scalars['String']>;
-  id: Scalars['ItemId'];
-  insection?: Maybe<Scalars['BooleanType']>;
-  productcategories: Array<IProductgroupRecord>;
-  sectionvariant?: Maybe<Scalars['String']>;
-  updatedAt: Scalars['DateTime'];
-};
-
-/** Record of type Auflistung von Produkt Kategorien  (productcategorylist) */
-export type IProductcategorylistRecord_SeoMetaTagsArgs = {
-  locale?: Maybe<ISiteLocale>;
-};
-
-/** Record of type Auflistung von Produkt Kategorien  (productcategorylist) */
-export type IProductcategorylistRecordBeschreibungstextArgs = {
-  markdown?: Maybe<Scalars['Boolean']>;
-};
-
-/** Record of type ProduktGruppe (productgroup) */
-export type IProductgroupRecord = {
-  __typename?: 'ProductgroupRecord';
-  _createdAt: Scalars['DateTime'];
-  _firstPublishedAt?: Maybe<Scalars['DateTime']>;
-  _isValid: Scalars['BooleanType'];
-  _modelApiKey: Scalars['String'];
-  _publicationScheduledAt?: Maybe<Scalars['DateTime']>;
-  _publishedAt?: Maybe<Scalars['DateTime']>;
-  /** SEO meta tags */
-  _seoMetaTags: Array<ITag>;
-  _status: IItemStatus;
-  _updatedAt: Scalars['DateTime'];
-  beschreibung?: Maybe<Scalars['String']>;
-  content?: Maybe<Array<Maybe<IProductgroupModelContentField>>>;
-  createdAt: Scalars['DateTime'];
-  id: Scalars['ItemId'];
-  produkte: Array<IProduktRecord>;
-  seo?: Maybe<ISeoField>;
-  seoText?: Maybe<Scalars['String']>;
-  slug?: Maybe<Scalars['String']>;
-  titel?: Maybe<Scalars['String']>;
-  updatedAt: Scalars['DateTime'];
-};
-
-/** Record of type ProduktGruppe (productgroup) */
-export type IProductgroupRecord_SeoMetaTagsArgs = {
-  locale?: Maybe<ISiteLocale>;
-};
-
-/** Record of type ProduktGruppe (productgroup) */
-export type IProductgroupRecordBeschreibungArgs = {
-  markdown?: Maybe<Scalars['Boolean']>;
-};
-
-/** Record of type ProduktGruppe (productgroup) */
-export type IProductgroupRecordSeoTextArgs = {
-  markdown?: Maybe<Scalars['Boolean']>;
-};
-
-export type IProductgroupModelContentField =
-  | IProductcategorylistRecord
-  | IFeaturedproductlistRecord;
-
-/** Record of type Auflistung von Featured Produkte (featuredproductlist) */
-export type IFeaturedproductlistRecord = {
-  __typename?: 'FeaturedproductlistRecord';
-  _createdAt: Scalars['DateTime'];
-  _firstPublishedAt?: Maybe<Scalars['DateTime']>;
-  _isValid: Scalars['BooleanType'];
-  _modelApiKey: Scalars['String'];
-  _publicationScheduledAt?: Maybe<Scalars['DateTime']>;
-  _publishedAt?: Maybe<Scalars['DateTime']>;
-  /** SEO meta tags */
-  _seoMetaTags: Array<ITag>;
-  _status: IItemStatus;
-  _updatedAt: Scalars['DateTime'];
-  beschreibung?: Maybe<Scalars['String']>;
-  createdAt: Scalars['DateTime'];
-  headline?: Maybe<Scalars['String']>;
-  id: Scalars['ItemId'];
-  limit?: Maybe<Scalars['IntType']>;
-  onlyhighlighted?: Maybe<Scalars['BooleanType']>;
-  products: Array<IProduktRecord>;
-  updatedAt: Scalars['DateTime'];
-};
-
-/** Record of type Auflistung von Featured Produkte (featuredproductlist) */
-export type IFeaturedproductlistRecord_SeoMetaTagsArgs = {
-  locale?: Maybe<ISiteLocale>;
-};
-
-/** Record of type Auflistung von Featured Produkte (featuredproductlist) */
-export type IFeaturedproductlistRecordBeschreibungArgs = {
-  markdown?: Maybe<Scalars['Boolean']>;
-};
-
-export type ISeoField = {
-  __typename?: 'SeoField';
-  description?: Maybe<Scalars['String']>;
-  image?: Maybe<IFileField>;
-  title?: Maybe<Scalars['String']>;
-  twitterCard?: Maybe<Scalars['String']>;
-};
-
 export type IProductgroupModelFilter = {
   _createdAt?: Maybe<ICreatedAtFilter>;
   createdAt?: Maybe<ICreatedAtFilter>;
@@ -1963,6 +1952,7 @@ export type IProductgroupModelFilter = {
   _updatedAt?: Maybe<IUpdatedAtFilter>;
   updatedAt?: Maybe<IUpdatedAtFilter>;
   _isValid?: Maybe<IBooleanFilter>;
+  preview?: Maybe<IJsonFilter>;
   produkte?: Maybe<ILinksFilter>;
   seoText?: Maybe<ITextFilter>;
   beschreibung?: Maybe<ITextFilter>;
@@ -1970,6 +1960,12 @@ export type IProductgroupModelFilter = {
   slug?: Maybe<ISlugFilter>;
   titel?: Maybe<IStringFilter>;
   OR?: Maybe<Array<Maybe<IProductgroupModelFilter>>>;
+};
+
+/** Specifies how to filter JSON fields */
+export type IJsonFilter = {
+  /** Filter records with the specified field defined (i.e. with any value) or not */
+  exists?: Maybe<Scalars['BooleanType']>;
 };
 
 /** Specifies how to filter Multiple-links fields */
@@ -2545,7 +2541,12 @@ export type IProductGroupBySlugQuery = { __typename?: 'Query' } & {
         produkte: Array<
           { __typename?: 'ProduktRecord' } & Pick<
             IProduktRecord,
-            'id' | 'newsIdentifier' | 'titel'
+            | 'id'
+            | 'newsIdentifier'
+            | 'titel'
+            | 'teaser'
+            | 'sponsored'
+            | 'highlight'
           >
         >;
       }
@@ -2635,6 +2636,9 @@ export const ProductGroupBySlugDocument = gql`
         id
         newsIdentifier
         titel
+        teaser
+        sponsored
+        highlight
       }
     }
   }
