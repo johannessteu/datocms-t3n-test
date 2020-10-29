@@ -28,7 +28,6 @@ interface ProdukteIndexInterface {
 
 const Produkte: NextPage<ProdukteIndexInterface> = ({
   content,
-  seoTags,
   description,
 }) => {
   return (

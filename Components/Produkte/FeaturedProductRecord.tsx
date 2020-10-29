@@ -12,15 +12,11 @@ import {
 import gql from 'graphql-tag';
 import { useEffect, useState } from 'react';
 import * as React from 'react';
-import { width } from 'styled-system';
-import {
-  IFeaturedproductlistRecord,
-  IProduktRecord,
-} from '../../interfaces/graphql-types.d';
+import { IFeaturedproductlistRecord } from '../../interfaces/graphql-types.d';
 import Markdown from '../Markdown';
 
 const ProductCardGrid: React.FC<{
-  news: { id: string; titel: string; newsIdentifier: string }[];
+  news: { id: string; titel?: string; newsIdentifier?: string }[];
 }> = ({ news }) => {
   const client = useApolloClient();
   const [loading, setLoading] = useState(true);
@@ -77,6 +73,10 @@ const ProductCardGrid: React.FC<{
   return (
     <Grid>
       {news.map((n) => {
+        if (!n.newsIdentifier) {
+          return;
+        }
+
         const apiNews = newsData.find((el) => {
           return el.identifier.substr(13) === n.newsIdentifier;
         });
@@ -99,10 +99,11 @@ const FeaturedProductRecord: React.FC<{
     'headline' | 'beschreibung' | 'limit'
   > & {
     products: Array<
-      { __typename?: 'ProduktRecord' } & Pick<
-        IProduktRecord,
-        'id' | 'titel' | 'newsIdentifier'
-      >
+      { __typename?: 'ProduktRecord' } & {
+        id: string;
+        titel?: string;
+        newsIdentifier?: string;
+      }
     >;
   };
 }> = ({ record, children }) => {
