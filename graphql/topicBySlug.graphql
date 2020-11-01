@@ -1,0 +1,44 @@
+query TopicBySlug ($slug: String!) {
+    topic(filter: {slug: {eq: $slug}}) {
+        id
+        titel
+        beschreibung
+        keywords
+        content {
+            __typename
+            ... on NewslistRecord {
+                id
+                keywords
+                layout
+            }
+
+            ... on FeatureduserRecord {
+                id
+                titel
+                sectionfarbe
+                layout
+            }
+
+            ... on FeaturedproductlistRecord {
+                id
+                beschreibung
+                headline
+                limit
+                sectionfarbe
+                products {
+                    id
+                    titel
+                    newsIdentifier
+                }
+            }
+
+            ... on FeaturednewsRecord {
+                id
+                layout
+                newsidentifier
+                titel
+                sectionfarbe
+            }
+        }
+    }
+}

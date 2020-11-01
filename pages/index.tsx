@@ -10,6 +10,7 @@ const Home = () => {
       <Section variant="primary">
         <H1>DatoCMS Prototyp</H1>
         <Link href="/produkte">Produkte</Link>
+        <Link href="/themen/asana">Themen</Link>
       </Section>
     </Layout>
   );

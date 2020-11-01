@@ -14,12 +14,11 @@ import { SectionVariants } from '@t3n/components/src/Section/Section';
 import gql from 'graphql-tag';
 import { useEffect, useState } from 'react';
 import * as React from 'react';
-import { IFeaturedproductlistRecord } from '../../interfaces/graphql-types.d';
-import Markdown from '../Markdown';
+import { IFeaturednewsRecord } from '../../interfaces/graphql-types.d';
 
-const ProductCardGrid: React.FC<{
-  news: { id: string; titel?: string; newsIdentifier?: string }[];
-}> = ({ news }) => {
+const NewsGrid: React.FC<{ newsIdentifiers: string[] }> = ({
+  newsIdentifiers,
+}) => {
   const client = useApolloClient();
   const [loading, setLoading] = useState(true);
   const [newsData, setNewsData] = useState<
@@ -28,12 +27,11 @@ const ProductCardGrid: React.FC<{
       identifier: string;
       teaser: string;
       imageUrl: string;
+      title: string;
     }[]
   >([]);
 
   useEffect(() => {
-    const newsIdentifiers = news.map((e) => e.newsIdentifier);
-
     client
       .query({
         query: gql`
@@ -43,6 +41,7 @@ const ProductCardGrid: React.FC<{
                 identifier
                 imageUrl
                 teaser
+                title
                 url
               }
             }
@@ -54,12 +53,12 @@ const ProductCardGrid: React.FC<{
         setNewsData(res.data.article.newsByIdentifiers);
         setLoading(false);
       });
-  }, [client, news]);
+  }, [client, newsIdentifiers]);
 
   if (loading) {
     return (
       <Grid>
-        {new Array(news.length).fill('').map(() => {
+        {new Array(newsIdentifiers.length).fill('').map(() => {
           return (
             <GridItem width={[1, 1, 1 / 3]}>
               <Card>
@@ -76,13 +75,9 @@ const ProductCardGrid: React.FC<{
 
   return (
     <Grid>
-      {news.map<JSX.Element | null>((n) => {
-        if (!n.newsIdentifier) {
-          return null;
-        }
-
+      {newsIdentifiers.map<JSX.Element | null>((n) => {
         const apiNews = newsData.find((el) => {
-          return el.identifier === n.newsIdentifier;
+          return el.identifier === `news-article-${n}`;
         });
 
         if (!apiNews) {
@@ -90,11 +85,11 @@ const ProductCardGrid: React.FC<{
         }
 
         return (
-          <GridItem key={n.id} width={[1, 1, 1 / 3]}>
+          <GridItem key={apiNews.identifier} width={[1, 1, 1 / 3]}>
             <Card href={apiNews.url}>
               <CardHeader image={apiNews.imageUrl} />
               <Heading styleAs="h5" as="h3" my={3}>
-                {n.titel}
+                {apiNews.title}
               </Heading>
               <Text>{apiNews.teaser}</Text>
             </Card>
@@ -104,29 +99,19 @@ const ProductCardGrid: React.FC<{
     </Grid>
   );
 };
-const FeaturedProductRecord: React.FC<{
-  sectionVariant: IFeaturedproductlistRecord['sectionfarbe'];
+const FeaturedNewsRecord: React.FC<{
   record: Pick<
-    IFeaturedproductlistRecord,
-    'headline' | 'beschreibung' | 'limit'
-  > & {
-    products: Array<
-      { __typename?: 'ProduktRecord' } & {
-        id: string;
-        titel?: string;
-        newsIdentifier?: string;
-      }
-    >;
-  };
-}> = ({ sectionVariant = 'Secondary', record, children }) => {
+    IFeaturednewsRecord,
+    'id' | 'layout' | 'newsidentifier' | 'titel' | 'sectionfarbe'
+  >;
+}> = ({ record, children }) => {
   return (
-    <Section variant={sectionVariant.toLowerCase() as SectionVariants}>
-      {record.headline && <H3>{record.headline}</H3>}
-      {record.beschreibung && <Markdown parse={record.beschreibung} />}
-      <ProductCardGrid news={record.products} />
+    <Section variant={record.sectionfarbe.toLowerCase() as SectionVariants}>
+      {record.titel && <H3>{record.titel}</H3>}
+      <NewsGrid newsIdentifiers={record.newsidentifier} />
       {children}
     </Section>
   );
 };
 
-export default FeaturedProductRecord;
+export default FeaturedNewsRecord;

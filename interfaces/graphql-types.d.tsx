@@ -35,6 +35,8 @@ export type IQuery = {
   _allProductgroupsMeta: ICollectionMetadata;
   /** Returns meta information regarding a record collection */
   _allProduktsMeta: ICollectionMetadata;
+  /** Returns meta information regarding a record collection */
+  _allTopicsMeta: ICollectionMetadata;
   /** Returns meta information regarding an assets collection */
   _allUploadsMeta?: Maybe<ICollectionMetadata>;
   /** Returns the single instance record */
@@ -45,6 +47,8 @@ export type IQuery = {
   allProductgroups: Array<IProductgroupRecord>;
   /** Returns a collection of records */
   allProdukts: Array<IProduktRecord>;
+  /** Returns a collection of records */
+  allTopics: Array<ITopicRecord>;
   /** Returns a collection of assets */
   allUploads: Array<IFileField>;
   /** Returns a specific record */
@@ -55,6 +59,8 @@ export type IQuery = {
   produkt?: Maybe<IProduktRecord>;
   /** Returns the single instance record */
   produkte?: Maybe<IProdukteRecord>;
+  /** Returns a specific record */
+  topic?: Maybe<ITopicRecord>;
   /** Returns a specific asset */
   upload?: Maybe<IFileField>;
 };
@@ -75,6 +81,12 @@ export type IQuery_AllProductgroupsMetaArgs = {
 export type IQuery_AllProduktsMetaArgs = {
   locale?: Maybe<ISiteLocale>;
   filter?: Maybe<IProduktModelFilter>;
+};
+
+/** The query root for this schema */
+export type IQuery_AllTopicsMetaArgs = {
+  locale?: Maybe<ISiteLocale>;
+  filter?: Maybe<ITopicModelFilter>;
 };
 
 /** The query root for this schema */
@@ -116,6 +128,15 @@ export type IQueryAllProduktsArgs = {
 };
 
 /** The query root for this schema */
+export type IQueryAllTopicsArgs = {
+  locale?: Maybe<ISiteLocale>;
+  skip?: Maybe<Scalars['IntType']>;
+  first?: Maybe<Scalars['IntType']>;
+  filter?: Maybe<ITopicModelFilter>;
+  orderBy?: Maybe<Array<Maybe<ITopicModelOrderBy>>>;
+};
+
+/** The query root for this schema */
 export type IQueryAllUploadsArgs = {
   locale?: Maybe<ISiteLocale>;
   skip?: Maybe<Scalars['IntType']>;
@@ -148,6 +169,13 @@ export type IQueryProduktArgs = {
 /** The query root for this schema */
 export type IQueryProdukteArgs = {
   locale?: Maybe<ISiteLocale>;
+};
+
+/** The query root for this schema */
+export type IQueryTopicArgs = {
+  locale?: Maybe<ISiteLocale>;
+  filter?: Maybe<ITopicModelFilter>;
+  orderBy?: Maybe<Array<Maybe<ITopicModelOrderBy>>>;
 };
 
 /** The query root for this schema */
@@ -515,6 +543,7 @@ export type IFeaturedproductlistRecord = {
   limit?: Maybe<Scalars['IntType']>;
   onlyhighlighted?: Maybe<Scalars['BooleanType']>;
   products: Array<IProduktRecord>;
+  sectionfarbe?: Maybe<Scalars['String']>;
   updatedAt: Scalars['DateTime'];
 };
 
@@ -2067,6 +2096,9 @@ export type INewslistRecord = {
   createdAt: Scalars['DateTime'];
   headline?: Maybe<Scalars['String']>;
   id: Scalars['ItemId'];
+  keywords?: Maybe<Scalars['String']>;
+  layout?: Maybe<Scalars['String']>;
+  paginated?: Maybe<Scalars['BooleanType']>;
   updatedAt: Scalars['DateTime'];
 };
 
@@ -2104,10 +2136,147 @@ export enum ILandingpageModelOrderBy {
   PublishedAtDesc = '_publishedAt_DESC',
   StatusAsc = '_status_ASC',
   StatusDesc = '_status_DESC',
+
   UpdatedAtAsc = 'updatedAt_ASC',
   UpdatedAtDesc = 'updatedAt_DESC',
   IsValidAsc = '_isValid_ASC',
   IsValidDesc = '_isValid_DESC',
+  TitelAsc = 'titel_ASC',
+  TitelDesc = 'titel_DESC',
+}
+
+/** Record of type Topic (topic) */
+export type ITopicRecord = {
+  __typename?: 'TopicRecord';
+  _createdAt: Scalars['DateTime'];
+  _firstPublishedAt?: Maybe<Scalars['DateTime']>;
+  _isValid: Scalars['BooleanType'];
+  _modelApiKey: Scalars['String'];
+  _publicationScheduledAt?: Maybe<Scalars['DateTime']>;
+  _publishedAt?: Maybe<Scalars['DateTime']>;
+  /** SEO meta tags */
+  _seoMetaTags: Array<ITag>;
+  _status: IItemStatus;
+  _updatedAt: Scalars['DateTime'];
+  beschreibung?: Maybe<Scalars['String']>;
+  content?: Maybe<Array<Maybe<ITopicModelContentField>>>;
+  createdAt: Scalars['DateTime'];
+  id: Scalars['ItemId'];
+  keywords?: Maybe<Scalars['String']>;
+  seo?: Maybe<ISeoField>;
+  slug?: Maybe<Scalars['String']>;
+  titel?: Maybe<Scalars['String']>;
+  updatedAt: Scalars['DateTime'];
+};
+
+/** Record of type Topic (topic) */
+export type ITopicRecord_SeoMetaTagsArgs = {
+  locale?: Maybe<ISiteLocale>;
+};
+
+/** Record of type Topic (topic) */
+export type ITopicRecordBeschreibungArgs = {
+  markdown?: Maybe<Scalars['Boolean']>;
+};
+
+export type ITopicModelContentField =
+  | IFeaturedproductlistRecord
+  | INewslistRecord
+  | IFeatureduserRecord
+  | IFeaturednewsRecord;
+
+/** Record of type FeaturedUser (featureduser) */
+export type IFeatureduserRecord = {
+  __typename?: 'FeatureduserRecord';
+  _createdAt: Scalars['DateTime'];
+  _firstPublishedAt?: Maybe<Scalars['DateTime']>;
+  _isValid: Scalars['BooleanType'];
+  _modelApiKey: Scalars['String'];
+  _publicationScheduledAt?: Maybe<Scalars['DateTime']>;
+  _publishedAt?: Maybe<Scalars['DateTime']>;
+  /** SEO meta tags */
+  _seoMetaTags: Array<ITag>;
+  _status: IItemStatus;
+  _updatedAt: Scalars['DateTime'];
+  createdAt: Scalars['DateTime'];
+  id: Scalars['ItemId'];
+  layout?: Maybe<Scalars['String']>;
+  sectionfarbe?: Maybe<Scalars['String']>;
+  titel?: Maybe<Scalars['String']>;
+  updatedAt: Scalars['DateTime'];
+};
+
+/** Record of type FeaturedUser (featureduser) */
+export type IFeatureduserRecord_SeoMetaTagsArgs = {
+  locale?: Maybe<ISiteLocale>;
+};
+
+/** Record of type FeaturedNews (featurednews) */
+export type IFeaturednewsRecord = {
+  __typename?: 'FeaturednewsRecord';
+  _createdAt: Scalars['DateTime'];
+  _firstPublishedAt?: Maybe<Scalars['DateTime']>;
+  _isValid: Scalars['BooleanType'];
+  _modelApiKey: Scalars['String'];
+  _publicationScheduledAt?: Maybe<Scalars['DateTime']>;
+  _publishedAt?: Maybe<Scalars['DateTime']>;
+  /** SEO meta tags */
+  _seoMetaTags: Array<ITag>;
+  _status: IItemStatus;
+  _updatedAt: Scalars['DateTime'];
+  createdAt: Scalars['DateTime'];
+  id: Scalars['ItemId'];
+  layout?: Maybe<Scalars['String']>;
+  newsidentifier?: Maybe<Scalars['JsonField']>;
+  sectionfarbe?: Maybe<Scalars['String']>;
+  titel?: Maybe<Scalars['String']>;
+  updatedAt: Scalars['DateTime'];
+};
+
+/** Record of type FeaturedNews (featurednews) */
+export type IFeaturednewsRecord_SeoMetaTagsArgs = {
+  locale?: Maybe<ISiteLocale>;
+};
+
+export type ITopicModelFilter = {
+  _createdAt?: Maybe<ICreatedAtFilter>;
+  createdAt?: Maybe<ICreatedAtFilter>;
+  id?: Maybe<IItemIdFilter>;
+  _firstPublishedAt?: Maybe<IPublishedAtFilter>;
+  _publicationScheduledAt?: Maybe<IPublishedAtFilter>;
+  _publishedAt?: Maybe<IPublishedAtFilter>;
+  _status?: Maybe<IStatusFilter>;
+  _updatedAt?: Maybe<IUpdatedAtFilter>;
+  updatedAt?: Maybe<IUpdatedAtFilter>;
+  _isValid?: Maybe<IBooleanFilter>;
+  keywords?: Maybe<IStringFilter>;
+  beschreibung?: Maybe<ITextFilter>;
+  seo?: Maybe<ISeoFilter>;
+  slug?: Maybe<ISlugFilter>;
+  titel?: Maybe<IStringFilter>;
+  OR?: Maybe<Array<Maybe<ITopicModelFilter>>>;
+};
+
+export enum ITopicModelOrderBy {
+  CreatedAtAsc = 'createdAt_ASC',
+  CreatedAtDesc = 'createdAt_DESC',
+  IdAsc = 'id_ASC',
+  IdDesc = 'id_DESC',
+  FirstPublishedAtAsc = '_firstPublishedAt_ASC',
+  FirstPublishedAtDesc = '_firstPublishedAt_DESC',
+  PublicationScheduledAtAsc = '_publicationScheduledAt_ASC',
+  PublicationScheduledAtDesc = '_publicationScheduledAt_DESC',
+  PublishedAtAsc = '_publishedAt_ASC',
+  PublishedAtDesc = '_publishedAt_DESC',
+  StatusAsc = '_status_ASC',
+  StatusDesc = '_status_DESC',
+
+  UpdatedAtAsc = 'updatedAt_ASC',
+  UpdatedAtDesc = 'updatedAt_DESC',
+  IsValidAsc = '_isValid_ASC',
+  IsValidDesc = '_isValid_DESC',
+  KeywordsAsc = 'keywords_ASC',
+  KeywordsDesc = 'keywords_DESC',
   TitelAsc = 'titel_ASC',
   TitelDesc = 'titel_DESC',
 }
@@ -2490,8 +2659,7 @@ export enum IUploadOrderBy {
   MimeTypeDesc = 'mimeType_DESC',
   FormatAsc = 'format_ASC',
   FormatDesc = 'format_DESC',
-  UpdatedAtAsc = '_updatedAt_ASC',
-  UpdatedAtDesc = '_updatedAt_DESC',
+
   IdAsc = 'id_ASC',
   IdDesc = 'id_DESC',
 }
@@ -2595,6 +2763,49 @@ export type IProdukteIndexQuery = { __typename?: 'Query' } & {
         >;
         _seoMetaTags: Array<
           { __typename?: 'Tag' } & Pick<ITag, 'attributes' | 'content'>
+        >;
+      }
+  >;
+};
+
+export type ITopicBySlugQueryVariables = Exact<{
+  slug: Scalars['String'];
+}>;
+
+export type ITopicBySlugQuery = { __typename?: 'Query' } & {
+  topic?: Maybe<
+    { __typename?: 'TopicRecord' } & Pick<
+      ITopicRecord,
+      'id' | 'titel' | 'beschreibung' | 'keywords'
+    > & {
+        content?: Maybe<
+          Array<
+            Maybe<
+              | ({ __typename: 'FeaturedproductlistRecord' } & Pick<
+                  IFeaturedproductlistRecord,
+                  'id' | 'beschreibung' | 'headline' | 'limit' | 'sectionfarbe'
+                > & {
+                    products: Array<
+                      { __typename?: 'ProduktRecord' } & Pick<
+                        IProduktRecord,
+                        'id' | 'titel' | 'newsIdentifier'
+                      >
+                    >;
+                  })
+              | ({ __typename: 'NewslistRecord' } & Pick<
+                  INewslistRecord,
+                  'id' | 'keywords' | 'layout'
+                >)
+              | ({ __typename: 'FeatureduserRecord' } & Pick<
+                  IFeatureduserRecord,
+                  'id' | 'titel' | 'sectionfarbe' | 'layout'
+                >)
+              | ({ __typename: 'FeaturednewsRecord' } & Pick<
+                  IFeaturednewsRecord,
+                  'id' | 'layout' | 'newsidentifier' | 'titel' | 'sectionfarbe'
+                >)
+            >
+          >
         >;
       }
   >;
@@ -2777,4 +2988,94 @@ export type ProdukteIndexLazyQueryHookResult = ReturnType<
 export type ProdukteIndexQueryResult = Apollo.QueryResult<
   IProdukteIndexQuery,
   IProdukteIndexQueryVariables
+>;
+export const TopicBySlugDocument = gql`
+  query TopicBySlug($slug: String!) {
+    topic(filter: { slug: { eq: $slug } }) {
+      id
+      titel
+      beschreibung
+      keywords
+      content {
+        __typename
+        ... on NewslistRecord {
+          id
+          keywords
+          layout
+        }
+        ... on FeatureduserRecord {
+          id
+          titel
+          sectionfarbe
+          layout
+        }
+        ... on FeaturedproductlistRecord {
+          id
+          beschreibung
+          headline
+          limit
+          sectionfarbe
+          products {
+            id
+            titel
+            newsIdentifier
+          }
+        }
+        ... on FeaturednewsRecord {
+          id
+          layout
+          newsidentifier
+          titel
+          sectionfarbe
+        }
+      }
+    }
+  }
+`;
+
+/**
+ * __useTopicBySlugQuery__
+ *
+ * To run a query within a React component, call `useTopicBySlugQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTopicBySlugQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTopicBySlugQuery({
+ *   variables: {
+ *      slug: // value for 'slug'
+ *   },
+ * });
+ */
+export function useTopicBySlugQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    ITopicBySlugQuery,
+    ITopicBySlugQueryVariables
+  >
+) {
+  return Apollo.useQuery<ITopicBySlugQuery, ITopicBySlugQueryVariables>(
+    TopicBySlugDocument,
+    baseOptions
+  );
+}
+export function useTopicBySlugLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ITopicBySlugQuery,
+    ITopicBySlugQueryVariables
+  >
+) {
+  return Apollo.useLazyQuery<ITopicBySlugQuery, ITopicBySlugQueryVariables>(
+    TopicBySlugDocument,
+    baseOptions
+  );
+}
+export type TopicBySlugQueryHookResult = ReturnType<typeof useTopicBySlugQuery>;
+export type TopicBySlugLazyQueryHookResult = ReturnType<
+  typeof useTopicBySlugLazyQuery
+>;
+export type TopicBySlugQueryResult = Apollo.QueryResult<
+  ITopicBySlugQuery,
+  ITopicBySlugQueryVariables
 >;

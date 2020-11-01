@@ -105,7 +105,13 @@ const ProductGroup: NextPage<ProductGroupInterface> = ({
       </Section>
       {content.map((el) => {
         if (el.__typename === 'FeaturedproductlistRecord') {
-          return <FeaturedProductRecord key={el.id} record={el} />;
+          return (
+            <FeaturedProductRecord
+              sectionVariant="primary"
+              key={el.id}
+              record={el}
+            />
+          );
         }
 
         if (el.__typename === 'ProductcategorylistRecord') {
