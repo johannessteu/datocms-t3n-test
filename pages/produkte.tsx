@@ -13,13 +13,6 @@ import {
   ProdukteIndexDocument,
 } from '../interfaces/graphql-types.d';
 
-interface ProdukteGroupInterface {
-  id: string;
-  title: string;
-  beschreibung: string;
-  slug: string;
-}
-
 interface ProdukteIndexInterface {
   seoTags: SeoMetaTagType[];
   description: IProdukteIndexQuery['produkte']['beschreibungstext'];
@@ -35,7 +28,13 @@ const Produkte: NextPage<ProdukteIndexInterface> = ({
       <Layout>
         {content.map((el) => {
           if (el.__typename === 'FeaturedproductlistRecord') {
-            return <FeaturedProductRecord key={el.id} record={el} />;
+            return (
+              <FeaturedProductRecord
+                sectionVariant="primary"
+                key={el.id}
+                record={el}
+              />
+            );
           }
 
           if (el.__typename === 'ProductcategorylistRecord') {
