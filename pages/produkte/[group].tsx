@@ -98,8 +98,8 @@ const ProductGroup: NextPage<ProductGroupInterface> = ({
   };
 
   return (
-    <Layout>
-      <Section>
+    <Layout hideBreadcrumbs={false}>
+      <Section innerGap={2}>
         {titel && <H1>{titel}</H1>}
         {beschreibung && <Markdown parse={beschreibung} />}
       </Section>
@@ -247,8 +247,6 @@ export const getStaticProps: GetStaticProps<
       });
     }
   });
-
-  console.log(products);
 
   return {
     props: {

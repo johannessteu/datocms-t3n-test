@@ -1,6 +1,6 @@
 import { Card, Grid, GridItem, H3, Section } from '@t3n/components';
 import { SectionVariants } from '@t3n/components/src/Section/Section';
-import Link, { default as NextLink } from 'next/link';
+import Link from 'next/link';
 import * as React from 'react';
 import {
   IProductcategorylistRecord,
@@ -20,7 +20,7 @@ const ProductCategoryListRecord: React.FC<{
       >
     >;
   };
-}> = ({ record, children }) => {
+}> = ({ record }) => {
   return (
     <Section variant={(record.sectionvariant as SectionVariants) || 'primary'}>
       {record.headline && <H3>{record.headline}</H3>}
@@ -31,13 +31,9 @@ const ProductCategoryListRecord: React.FC<{
       <Grid mt={2}>
         {record.productcategories.map((p) => (
           <GridItem key={p.id} width={[1, 1, 1 / 3]}>
-            <NextLink
-              href="/produkte/[group]"
-              as={`/produkte/${p.slug}`}
-              passHref
-            >
+            <Link href="/produkte/[group]" as={`/produkte/${p.slug}`} passHref>
               <Card>{p.titel}</Card>
-            </NextLink>
+            </Link>
           </GridItem>
         ))}
       </Grid>

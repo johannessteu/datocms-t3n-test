@@ -7,7 +7,8 @@ import {
   Section,
   Placeholder,
   CardHeader,
-  H4,
+  Heading,
+  Text,
 } from '@t3n/components';
 import gql from 'graphql-tag';
 import { useEffect, useState } from 'react';
@@ -24,6 +25,7 @@ const ProductCardGrid: React.FC<{
     {
       url: string;
       identifier: string;
+      teaser: string;
       imageUrl: string;
     }[]
   >([]);
@@ -39,6 +41,7 @@ const ProductCardGrid: React.FC<{
               newsByIdentifiers(identifiers: $identifiers) {
                 identifier
                 imageUrl
+                teaser
                 url
               }
             }
@@ -50,7 +53,7 @@ const ProductCardGrid: React.FC<{
         setNewsData(res.data.article.newsByIdentifiers);
         setLoading(false);
       });
-  }, []);
+  }, [client, news]);
 
   if (loading) {
     return (
@@ -72,9 +75,9 @@ const ProductCardGrid: React.FC<{
 
   return (
     <Grid>
-      {news.map((n) => {
+      {news.map<JSX.Element | null>((n) => {
         if (!n.newsIdentifier) {
-          return;
+          return null;
         }
 
         const apiNews = newsData.find((el) => {
@@ -86,10 +89,13 @@ const ProductCardGrid: React.FC<{
         }
 
         return (
-          <GridItem width={[1, 1, 1 / 3]}>
+          <GridItem key={n.id} width={[1, 1, 1 / 3]}>
             <Card href={apiNews.url}>
               <CardHeader image={apiNews.imageUrl} />
-              <H4 mt={0}>{n.titel}</H4>
+              <Heading styleAs="h5" as="h3" my={3}>
+                {n.titel}
+              </Heading>
+              <Text>{apiNews.teaser}</Text>
             </Card>
           </GridItem>
         );

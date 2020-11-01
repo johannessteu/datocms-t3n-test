@@ -8,7 +8,9 @@ favicon.ico
 *.json
 *.lock
 *.css
+*.graphql
 .next/
+import/*
 dist
 next.config.js
 __generated__

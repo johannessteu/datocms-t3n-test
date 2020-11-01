@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import * as React from 'react';
 
-import { H1, Heading, Section } from '@t3n/components';
+import { H1, Section } from '@t3n/components';
 import Layout from '../Components/Layout';
 
 const Home = () => {
